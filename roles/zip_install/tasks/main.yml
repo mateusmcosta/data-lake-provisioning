@@ -1,0 +1,6 @@
+---
+ - name: 'Install Zip'
+   yum:
+     name: "zip"
+     state: present
+   become: yes

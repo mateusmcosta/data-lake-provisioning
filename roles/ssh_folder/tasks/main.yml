@@ -1,0 +1,17 @@
+---
+- name: Check if .ssh folder exists
+  become: true
+  stat:
+    path: "/home/{{ hadoop_user }}/.ssh/"
+  register: ssh_folder
+
+- name: Create .ssh Folder
+  become: true
+  file:
+    path: "/home/{{ hadoop_user }}/.ssh/"
+    recurse: yes
+    state: directory
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: '0700'
+  when: ssh_folder.stat.exists == false

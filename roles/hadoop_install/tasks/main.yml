@@ -1,0 +1,36 @@
+---
+ - name: Check if Hadoop has already installed
+   become: true
+   stat:
+     path: "{{ hadoop_home }}"
+   register: hadoop_folder
+
+ - name: Copy Hadoop to /opt/
+   become: true
+   unarchive:
+     src: files/hadoop-3.1.3.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: hadoop_folder.stat.exists == false
+
+ - name: Define Hadoop Home environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^HADOOP_HOME=
+     line: "export HADOOP_HOME={{ hadoop_home }}"
+
+ - name: Define Hadoop PATH on environment
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^$PATH:$HADOOP_HOME/bin=
+     line: "export PATH=$PATH:$HADOOP_HOME/bin"
+
+ - name: Refresh the bash_profile
+   become: true
+   shell: 'source /home/{{ hadoop_user }}/.bash_profile'
+   when: hadoop_folder.stat.exists == false

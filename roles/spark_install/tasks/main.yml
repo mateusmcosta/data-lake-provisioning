@@ -1,0 +1,101 @@
+---
+ - name: Check if Spark has already installed
+   become: true
+   stat:
+     path: "{{ spark_home }}"
+   register: spark_folder
+
+ - name: Copy Spark to /opt/
+   become: true
+   unarchive:
+     src: files/spark-2.3.4.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: spark_folder.stat.exists == false
+
+ - name: Define HADOOP_CONF_DIR environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^HADOOP_CONF_DIR=
+     line: "export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop"
+
+ - name: Define SPARK_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export SPARK_HOME=
+     line: "export SPARK_HOME={{ spark_home }}"
+
+ - name: Define LD_LIBRARY_PATH on environment
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^LD_LIBRARY_PATH=
+     line: "export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH"
+
+ - name: Define Spark on PATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^PATH=$PATH:$SPARK_HOME
+     line: "export PATH=$PATH:$SPARK_HOME/bin"
+
+ - name: Refresh the bash_profile
+   become: true
+   shell: 'source /home/{{ hadoop_user }}/.bash_profile'
+   when: spark_folder.stat.exists == false
+
+ - name: Config spark-defaults.conf
+   become: true
+   template:
+     src: 'templates/spark-defaults.conf.j2'
+     dest: '{{ spark_home }}/conf/spark-defaults.conf'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ # - name: Config spark-env.sh
+ #   become: true
+ #   template:
+ #     src: 'templates/spark-env.sh.j2'
+ #     dest: '{{ spark_home }}/conf/spark-env.sh'
+ #     owner: "{{ hadoop_user }}"
+ #     group: "{{ hadoop_user }}"
+
+ - name: Check Spark Log Folder exists
+   become: true
+   stat:
+     path: "{{ spark_home }}/{{ spark_log }}"
+   register: spark_log_folder
+
+ - name: Create Spark Log Folder
+   become: true
+   file:
+     path: "{{ spark_home }}/{{ spark_log }}"
+     recurse: yes
+     state: directory
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: spark_log_folder.stat.exists == false
+
+
+ - name: Check Spark Event Folder exists
+   become: true
+   stat:
+     path: "{{ spark_home }}/{{ spark_event }}"
+   register: spark_event_folder
+
+ - name: Create Spark Log Folder
+   become: true
+   file:
+     path: "{{ spark_home }}/{{ spark_event }}"
+     recurse: yes
+     state: directory
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: spark_event_folder.stat.exists == false

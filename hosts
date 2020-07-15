@@ -1,0 +1,21 @@
+[hdp_master]
+10.220.0.11 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake/.vagrant/machines/hdp-master/virtualbox/private_key"
+
+[hdp_master:vars]
+host_ip=10.220.0.11
+host_name=hdp-master
+
+[hdp_node01]
+10.220.0.12 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake/.vagrant/machines/hdp-node01/virtualbox/private_key"
+
+[hdp_node01:vars]
+host_ip=10.220.0.12
+host_name=hdp-node01
+
+[hdp_node02]
+10.220.0.13 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake/.vagrant/machines/hdp-node02/virtualbox/private_key"
+
+
+[hdp_node02:vars]
+host_ip=10.220.0.13
+host_name=hdp-node02

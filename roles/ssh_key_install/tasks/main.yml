@@ -1,0 +1,7 @@
+---
+- name: Set authorized key taken from file
+  become: true
+  authorized_key:
+    user: "{{ hadoop_user }}"
+    state: present
+    key: "{{ lookup('file', 'files/{{ ssh_key_name }}.pub') }}"

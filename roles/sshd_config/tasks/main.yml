@@ -1,0 +1,43 @@
+- name: Enable Port 22
+  become: true
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#Port 22'
+    line: "Port 22"
+    state: present
+    backup: yes
+  notify:
+    - restart sshd
+
+- name: Enable ListenAddress First Line
+  become: true
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#ListenAddress 0.0.0.0'
+    line: "ListenAddress 0.0.0.0"
+    state: present
+    backup: yes
+  notify:
+    - restart sshd
+
+- name: Enable ListenAddress Second Line
+  become: true
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#ListenAddress ::'
+    line: "ListenAddress ::"
+    state: present
+    backup: yes
+  notify:
+    - restart sshd
+
+- name: Enable Pubkey Authentication
+  become: true
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#PubkeyAuthentication yes'
+    line: "PubkeyAuthentication yes"
+    state: present
+    backup: yes
+  notify:
+    - restart sshd

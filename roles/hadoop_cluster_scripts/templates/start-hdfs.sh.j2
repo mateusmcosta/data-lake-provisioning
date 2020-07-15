@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+FILE=~/.ssh/known_hosts
+if [ -f "$FILE" ]; then
+    echo "$FILE has already been configured"
+else
+    echo "$FILE configuring..."
+
+    ssh-keyscan -H {{ hostvars[groups['hdp_node01'][0]].host_name }} >> ~/.ssh/known_hosts
+    ssh-keyscan -H {{ hostvars[groups['hdp_node02'][0]].host_name }} >> ~/.ssh/known_hosts
+
+    ssh-keyscan -H {{ hostvars[groups['hdp_master'][0]].host_name }} >> ~/.ssh/known_hosts
+
+    echo "Formating NameNode..."
+    hdfs namenode -format
+fi
+
+#Start HDFS cluster
+$HADOOP_HOME/sbin/start-dfs.sh
+
+#Start YARN
+$HADOOP_HOME/sbin/start-yarn.sh
+
+echo "HDFS Started..."

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+
+echo "Sending Yarn Libs to HDFS..."
+hdfs dfs -mkdir /spark-logs
+hdfs dfs -mkdir /spark
+hdfs dfs -mkdir /spark/jars
+
+hdfs dfs -put $SPARK_HOME/jars/* /spark/jars/
+
+echo "Finished..."

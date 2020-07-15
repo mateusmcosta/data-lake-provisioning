@@ -1,0 +1,4 @@
+---
+spark_home: "/opt/spark-2.3.4"
+spark_log: "spark-logs"
+spark_event: "spark-event-log"

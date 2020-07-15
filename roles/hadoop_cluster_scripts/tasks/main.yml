@@ -1,0 +1,45 @@
+---
+- name: Copy file start-hdfs.sh
+  template:
+    src: 'templates/start-hdfs.sh.j2'
+    dest: '/home/{{ hadoop_user }}/start-hdfs.sh'
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: "755"
+  become: yes
+
+- name: Copy file stop-hdfs.sh
+  template:
+    src: 'templates/stop-hdfs.sh.j2'
+    dest: '/home/{{ hadoop_user }}/stop-hdfs.sh'
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: "0755"
+  become: yes
+
+- name: Copy file init-spark.sh
+  template:
+    src: 'templates/init-spark.sh.j2'
+    dest: '/home/{{ hadoop_user }}/init-spark.sh'
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: "0755"
+  become: yes
+
+- name: Copy file start-spark.sh
+  template:
+    src: 'templates/start-spark.sh.j2'
+    dest: '/home/{{ hadoop_user }}/start-spark.sh'
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: "0755"
+  become: yes
+
+- name: Copy file stop-spark.sh
+  template:
+    src: 'templates/stop-spark.sh.j2'
+    dest: '/home/{{ hadoop_user }}/stop-spark.sh'
+    owner: "{{ hadoop_user }}"
+    group: "{{ hadoop_user }}"
+    mode: "0755"
+  become: yes

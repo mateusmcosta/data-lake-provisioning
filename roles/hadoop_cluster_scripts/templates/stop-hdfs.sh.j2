@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+#Start HDFS cluster
+$HADOOP_HOME/sbin/stop-dfs.sh
+
+#Start YARN
+$HADOOP_HOME/sbin/stop-yarn.sh

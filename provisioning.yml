@@ -1,0 +1,24 @@
+---
+- hosts: hdp_master
+  roles:
+    - network
+    - sshd_config
+    - ssh_key_generate
+    - ssh_key_install
+    - hadoop_config
+    - spark_install
+    - hadoop_cluster_scripts
+
+- hosts: hdp_node01
+  roles:
+    - network
+    - sshd_config
+    - ssh_key_install
+    - hadoop_config
+
+- hosts: hdp_node02
+  roles:
+    - network
+    - sshd_config
+    - ssh_key_install
+    - hadoop_config

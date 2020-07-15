@@ -1,0 +1,22 @@
+---
+ - name: Check if .ssh folder exists
+   become: true
+   stat:
+     path: "/home/{{ hadoop_user }}"
+   register: user_folder
+
+ - name: 'Create hadoop password'
+   become: true
+   command: "python -c 'import crypt; print crypt.crypt(\"{{ hadoop_password }}\")'"
+   register: EFAP
+   when: user_folder.stat.exists == false
+
+ - name: 'Create a hadoop User'
+   become: true
+   user:
+     name: "{{ hadoop_user }}"
+     password: "{{ EFAP.stdout }}"
+     state: present
+     system: yes
+     createhome: yes
+   when: user_folder.stat.exists == false
