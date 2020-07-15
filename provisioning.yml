@@ -2,6 +2,7 @@
 - hosts: hdp_master
   roles:
     - network
+    - firewalld_disable
     - sshd_config
     - ssh_key_generate
     - ssh_key_install
@@ -12,6 +13,7 @@
 - hosts: hdp_node01
   roles:
     - network
+    - firewalld_disable
     - sshd_config
     - ssh_key_install
     - hadoop_config
@@ -19,6 +21,7 @@
 - hosts: hdp_node02
   roles:
     - network
+    - firewalld_disable
     - sshd_config
     - ssh_key_install
     - hadoop_config

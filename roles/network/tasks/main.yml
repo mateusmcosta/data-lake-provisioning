@@ -7,10 +7,3 @@
       {% for host in groups['all'] %}
       {{ hostvars[host].host_ip }} {{ hostvars[host].host_name }}
       {% endfor %}
-
-- name: Stop and Disable Firewalld
-  become: true
-  service:
-    name: firewalld
-    state: stopped
-    enabled: false

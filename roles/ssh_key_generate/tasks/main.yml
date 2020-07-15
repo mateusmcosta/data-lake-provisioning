@@ -6,7 +6,7 @@
      dest: '/home/{{ hadoop_user }}/.ssh/{{ ssh_key_name }}'
      owner: "{{ hadoop_user }}"
      group: "{{ hadoop_user }}"
-     mode: '0600'
+     mode: '0400'
 
  - name: Copy hdp-key Public Key
    become: true
@@ -15,4 +15,4 @@
      dest: '/home/{{ hadoop_user }}/.ssh/{{ ssh_key_name }}.pub'
      owner: "{{ hadoop_user }}"
      group: "{{ hadoop_user }}"
-     mode: '0600'
+     mode: '0400'

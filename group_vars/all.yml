@@ -3,5 +3,5 @@
   hadoop_password: "hadoop@20"
   hadoop_home: "/opt/hadoop-3.1.3"
   java_home: "/usr/lib/jvm/java-1.8.0-openjdk"
-  ssh_key_name: id_rsa
   dfs_folder_home: "dfs"
+  ssh_key_name: "id_rsa"
