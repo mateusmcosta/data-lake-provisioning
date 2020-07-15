@@ -1,0 +1,7 @@
+---
+- hosts: hdp_master
+  roles:
+    - firewalld_disable
+    - sshd_config
+    - ssh_key_generate
+    - ssh_key_install

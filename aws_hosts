@@ -1,0 +1,20 @@
+[hdp_master]
+ec2-3-129-45-218.us-east-2.compute.amazonaws.com ansible_user=ec2-user ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/files/aws/data-lake.pem"
+
+[hdp_master:vars]
+host_ip=172.31.0.181
+host_name=ip-172-31-0-181.us-east-2.compute.internal
+
+[hdp_node01]
+10.220.0.12 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/hdp-node01/virtualbox/private_key"
+
+[hdp_node01:vars]
+host_ip=10.220.0.12
+host_name=hdp-node01
+
+[hdp_node02]
+10.220.0.13 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/hdp-node02/virtualbox/private_key"
+
+[hdp_node02:vars]
+host_ip=10.220.0.13
+host_name=hdp-node02
