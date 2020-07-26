@@ -18,3 +18,11 @@ host_name=hdp-node01
 [hdp_node02:vars]
 host_ip=10.220.0.13
 host_name=hdp-node02
+
+
+[custumer_db]
+10.220.0.21 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/custumer-db/virtualbox/private_key"
+
+[custumer_db:vars]
+host_ip=10.220.0.21
+host_name=custumer-db

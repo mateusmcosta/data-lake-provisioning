@@ -1,0 +1,45 @@
+---
+  - name: Check if Mysql has already installed
+    become: true
+    stat:
+      path: "/var/lib/mysql"
+    register: mysql_present
+
+  - name: Download MySQL Community Repo
+    become: true
+    get_url:
+      url: "{{ mysql_repo}}"
+      dest: /tmp
+    when: mysql_present.stat.exists == false
+
+  - name: Install MySQL Community Repo
+    become: true
+    command: "/usr/bin/rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm"
+    when: mysql_present.stat.exists == false
+
+  - name: Install MySQL
+    become: true
+    yum:
+      name: mysql-server
+      state: present
+
+  - name: Install Python MySQL
+    become: true
+    yum:
+      name: MySQL-python
+      state: present
+
+  - name: Start MySQL
+    become: true
+    service:
+      name: mysqld
+      state: started
+      enabled: true
+
+  - name: 'Configura MySQL para aceitar conexões remotas'
+    copy:
+      src: 'files/my.cnf'
+      dest: '/etc/my.cnf'
+    become: yes
+    notify:
+      - restart mysql

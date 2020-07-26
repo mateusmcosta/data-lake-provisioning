@@ -1,0 +1,3 @@
+---
+  mysql_repo: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+  mysql_repo_artifact: mysql-community-release-el7-5.noarch.rpm

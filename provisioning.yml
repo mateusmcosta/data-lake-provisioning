@@ -25,3 +25,10 @@
     - sshd_config
     - ssh_key_install
     - hadoop_config
+
+- hosts: custumer_db
+  roles:
+    - network
+    - firewalld_disable
+    - mysql_install
+    - custumer_db_config

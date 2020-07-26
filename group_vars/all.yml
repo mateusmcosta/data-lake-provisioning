@@ -5,3 +5,7 @@
   java_home: "/usr/lib/jvm/java-1.8.0-openjdk"
   dfs_folder_home: "dfs"
   ssh_key_name: "id_rsa"
+
+  custumer_db_username: application
+  custumer_db_name: custumers_db
+  custumer_db_password: app@2020

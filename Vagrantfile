@@ -26,4 +26,13 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "1"]
     end
   end
+
+  config.vm.define "custumer-db" do |m|
+    m.vm.hostname = "custumer-db"
+    m.vm.network "private_network", ip: "10.220.0.21"
+    m.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+  end
 end

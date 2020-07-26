@@ -1,0 +1,15 @@
+---
+- name: 'Cria o banco Custumers'
+  mysql_db:
+    name: "{{ custumer_db_name }}"
+    login_user: root
+    state: present
+
+- name: 'Cria o usuário do MySQL'
+  mysql_user:
+    login_user: root
+    name: "{{ custumer_db_username }}"
+    password: "{{ custumer_db_password }}"
+    priv: "{{ custumer_db_name }}.*:ALL"
+    state: present
+    host: "10.220.0.1"
