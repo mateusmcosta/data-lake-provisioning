@@ -1,0 +1,17 @@
+---
+  - name: Install PostgreSQL
+    become: true
+    yum:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - postgresql
+        - postgresql-server
+
+  - name: Start PostgreSQL
+    become: true
+    service:
+      name: postgresql.service
+      state: started
+      enabled: true

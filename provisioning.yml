@@ -32,3 +32,20 @@
     - firewalld_disable
     - mysql_install
     - custumer_db_config
+
+- hosts: replication
+  roles:
+    - network
+    - firewalld_disable
+    - sshd_config
+    - ssh_key_install
+    - hadoop_config
+    - sqoop_install
+
+- hosts: hive_server
+  roles:
+    - network
+    - firewalld_disable
+    - sshd_config
+    - ssh_key_install
+    - hive_install

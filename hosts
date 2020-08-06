@@ -26,3 +26,19 @@ host_name=hdp-node02
 [custumer_db:vars]
 host_ip=10.220.0.21
 host_name=custumer-db
+
+
+[replication]
+10.220.0.31 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/replication/virtualbox/private_key"
+
+[replication:vars]
+host_ip=10.220.0.31
+host_name=replication
+
+
+[hive_server]
+10.220.0.15 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/hive-server/virtualbox/private_key"
+
+[hive_server:vars]
+host_ip=10.220.0.15
+host_name=hive-server

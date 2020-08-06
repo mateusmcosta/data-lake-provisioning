@@ -1,0 +1,47 @@
+---
+ - name: Check if Hive has already installed
+   become: true
+   stat:
+     path: "{{ hive_home }}"
+   register: hive_folder
+
+ - name: Copy Hive to /opt/
+   become: true
+   unarchive:
+     src: files/hive-3.1.2.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: hive.stat.exists == false
+
+ - name: Define HIVE_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export HIVE_HOME=
+     line: "export HIVE_HOME={{ hive_home }}"
+
+ - name: Define Hive on PATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^PATH=$PATH:$HIVE_HOME
+     line: "export PATH=$PATH:$HIVE_HOME/bin"
+
+ - name: Define HADOOP on CLASSPATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^CLASSPATH=$CLASSPATH:$HADOOP_HOME
+     line: "export CLASSPATH=$CLASSPATH:$HADOOP_HOME/lib/*"
+
+ - name: Define HIVE on CLASSPATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^CLASSPATH=$CLASSPATH:$HIVE_HOME
+     line: "export CLASSPATH=$CLASSPATH:$HIVE_HOME/lib/*"

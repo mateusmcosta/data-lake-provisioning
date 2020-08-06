@@ -1,0 +1,40 @@
+---
+ - name: Check if Sqoop has already installed
+   become: true
+   stat:
+     path: "{{ sqoop_home }}"
+   register: sqoop_folder
+
+ - name: Copy Sqoop to /opt/
+   become: true
+   unarchive:
+     src: files/sqoop-1.4.7.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: sqoop_folder.stat.exists == false
+
+ - name: Define SQOOP_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export SQOOP_HOME=
+     line: "export SQOOP_HOME={{ sqoop_home }}"
+
+ - name: Define Sqoop on PATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^PATH=$PATH:$SQOOP_HOME
+     line: "export PATH=$PATH:$SQOOP_HOME/bin"
+
+ - name: Install MySQL JDBC Driver
+   become: true
+   copy:
+     src: files/mysql-connector-java-5.1.49.jar
+     dest: '{{ sqoop_home }}/lib/mysql-connector-java-5.1.49.jar'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: '0644'

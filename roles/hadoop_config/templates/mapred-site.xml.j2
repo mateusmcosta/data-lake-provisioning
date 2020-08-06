@@ -23,6 +23,16 @@
   </property>
 
  <property>
+    <name>mapreduce.map.maxattempts</name>
+    <value>20</value>
+</property>
+
+<property>
+    <name>mapreduce.reduce.maxattempts</name>
+    <value>20</value>
+</property>
+
+ <property>
     <name>yarn.resourcemanager.address</name>
     <value>{{ hostvars[groups['hdp_master'][0]].host_name }}:8032</value>
  </property>

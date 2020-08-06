@@ -1,0 +1,4 @@
+---
+dependencies:
+  - hadoop_config
+  - postgresql_install

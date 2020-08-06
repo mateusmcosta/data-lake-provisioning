@@ -10,6 +10,46 @@
     login_user: root
     name: "{{ custumer_db_username }}"
     password: "{{ custumer_db_password }}"
-    priv: "{{ custumer_db_name }}.*:ALL"
+    priv: "{{ custumer_db_name }}.*:ALL,GRANT"
     state: present
-    host: "10.220.0.1"
+    host: "%"
+
+- name: Check if customer DB Table's has already created
+  become: true
+  stat:
+    path: "/tmp/create-tables.sql"
+  register: custumer_tables_present
+
+- name: Check if customer DB Data has already inserted
+  become: true
+  stat:
+    path: "/tmp/customer-data-inserts.sql"
+  register: custumer_data_present
+
+- name: 'Copia Script de criacao do Banco custumer_db'
+  copy:
+    src: files/create-tables.sql
+    dest: /tmp/create-tables.sql
+  become: yes
+
+- name: 'Cria as tabelas na Base Dados custumer_db'
+  mysql_db:
+    name: "{{ custumer_db_name }}"
+    login_user: root
+    state: import
+    target: /tmp/create-tables.sql
+  when: custumer_tables_present.stat.exists == false
+
+- name: 'Copia Script de carga de dados do Banco custumer_db'
+  copy:
+    src: files/customer-data-inserts.sql
+    dest: /tmp/customer-data-inserts.sql
+  become: yes
+
+- name: 'Carga de dados do Banco custumer_db'
+  mysql_db:
+    name: "{{ custumer_db_name }}"
+    login_user: root
+    state: import
+    target: /tmp/customer-data-inserts.sql
+  when: custumer_data_present.stat.exists == false

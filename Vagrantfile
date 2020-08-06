@@ -35,4 +35,23 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--cpus", "2"]
     end
   end
+
+  config.vm.define "replication" do |m|
+    m.vm.hostname = "replication"
+    m.vm.network "private_network", ip: "10.220.0.31"
+    m.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+  end
+
+  config.vm.define "hive-server" do |m|
+    m.vm.hostname = "hive-server"
+    m.vm.network "private_network", ip: "10.220.0.15"
+    m.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+  end
+
 end
