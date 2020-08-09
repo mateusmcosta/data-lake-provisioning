@@ -9,3 +9,5 @@
   custumer_db_username: application
   custumer_db_name: custumers_db
   custumer_db_password: app@2020
+
+  mysql_repo: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm

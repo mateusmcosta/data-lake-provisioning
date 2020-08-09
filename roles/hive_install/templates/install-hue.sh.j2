@@ -1,0 +1,28 @@
+#!/bin/bash
+echo "Init Hue Install..."
+
+cd /home/{{ hadoop_user }}/
+
+tar xzf hue-4.2.0.tgz -C /usr/local
+
+cd /usr/local
+pushd hue-4.2.0/
+make install
+popd
+
+echo "Hue installed..."
+
+echo "Removing Installer Files"
+
+
+chown -R {{ hue_user }}:{{ hue_user }} {{ hue_home }}
+
+
+rm -r /usr/local/hue-4.2.0
+rm /home/{{ hadoop_user }}/hue-4.2.0.tgz
+
+
+echo "Creating synbolic link..."
+ln -s {{ hue_home }} {{ hue_home_link }}
+
+echo "Finished..."

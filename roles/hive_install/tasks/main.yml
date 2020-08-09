@@ -5,6 +5,59 @@
      path: "{{ hive_home }}"
    register: hive_folder
 
+ - name: Download MySQL Community Repo
+   become: true
+   get_url:
+     url: "{{ mysql_repo}}"
+     dest: /tmp
+   when: hive_folder.stat.exists == false
+
+ - name: Install MySQL Community Repo
+   become: true
+   command: "/usr/bin/rpm -ivh /tmp/mysql-community-release-el7-5.noarch.rpm"
+   when: hive_folder.stat.exists == false
+
+ - name: Install HUE Depencies
+   become: true
+   yum:
+     name: "{{ packages }}"
+     state: present
+   vars:
+     packages:
+       - ant
+       - gcc
+       - make
+       - python-devel.x86_64
+       - "@Development Tools"
+       - krb5-devel
+       - libxslt-devel
+       - libxml2-devel
+       - ncurses-devel
+       - zlib-devel
+       - texinfo
+       - qt-devel
+       - tcl-devel
+       - tk-devel
+       - kernel-headers
+       - kernel-devel
+       - gmp-devel.x86_64
+       - sqlite-devel.x86_64
+       - cyrus-sasl.x86_64
+       # - postfix
+       - cyrus-imapd
+       # - cyrus-md5
+       # - cyrus-utilsyum
+       - memcached-devel.x86_64
+       - libevent
+       - libevent-devel
+       - cyrus-sasl
+       - openldap-devel
+       - maven
+       - libffi-devel
+       - openssl-devel
+       - mysql-devel
+       - cyrus-sasl-plain
+
  - name: Copy Hive to /opt/
    become: true
    unarchive:
@@ -12,7 +65,7 @@
      dest: '/opt/'
      owner: "{{ hadoop_user }}"
      group: "{{ hadoop_user }}"
-   when: hive.stat.exists == false
+   when: hive_folder.stat.exists == false
 
  - name: Define HIVE_HOME environment variable
    become: true
@@ -45,3 +98,125 @@
      state: present
      regexp: ^CLASSPATH=$CLASSPATH:$HIVE_HOME
      line: "export CLASSPATH=$CLASSPATH:$HIVE_HOME/lib/*"
+
+ - name: Copy JDBC Driver to Hive Lib
+   become: true
+   copy:
+     src: files/postgresql-42.2.14.jar
+     dest: "{{ hive_home }}/lib/postgresql-42.2.14.jar"
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Create Hive User on postgres
+   become: true
+   become_user: postgres
+   postgresql_user:
+     name: hiveuser
+     password: hiveuser
+
+ - name: Create Hive metastore DB
+   become: true
+   become_user: postgres
+   postgresql_db:
+     name: metastore
+
+ - name: GRANT Hive user PRIVILEGES on metastore DB
+   become: true
+   become_user: postgres
+   postgresql_privs:
+     db: metastore
+     privs: ALL
+     type: database
+     role: hiveuser
+
+ - name: Copy hive-site.xml
+   become: true
+   copy:
+     src: files/hive-site.xml
+     dest: "{{ hive_home }}/conf/hive-site.xml"
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Copy int-hive.sh
+   become: true
+   template:
+     src: 'templates/init-hive.sh.j2'
+     dest: '/home/{{ hadoop_user }}/init-hive.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"
+
+ - name: Copy int-hive.sh
+   become: true
+   template:
+     src: 'templates/start-hive.sh.j2'
+     dest: '/home/{{ hadoop_user }}/start-hive.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"
+
+ - name: Check if Hue User folder exists
+   become: true
+   stat:
+     path: "/home/{{ hue_user }}"
+   register: user_folder
+
+ - name: 'Create Hue password'
+   become: true
+   command: "python -c 'import crypt; print crypt.crypt(\"{{ hue_user }}\")'"
+   register: EFAP
+   when: user_folder.stat.exists == false
+
+ - name: 'Create a hue_user User'
+   become: true
+   user:
+     name: "{{ hue_user }}"
+     password: "{{ EFAP.stdout }}"
+     state: present
+     system: yes
+     createhome: yes
+   when: user_folder.stat.exists == false
+
+ - name: Copy HUE Installer
+   become: true
+   copy:
+     src: files/hue-4.2.0.tgz
+     dest: "/home/{{ hadoop_user }}/hue-4.2.0.tgz"
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Copy install-hue.sh
+   become: true
+   template:
+     src: 'templates/install-hue.sh.j2'
+     dest: '/home/{{ hadoop_user }}/install-hue.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"
+
+ - name: Check if Hue folder exists
+   become: true
+   stat:
+     path: "{{ hue_home }}"
+   register: hue_folder
+
+ - name: Install Hue
+   become: true
+   shell: "/home/{{ hadoop_user }}/install-hue.sh"
+   when: hue_folder.stat.exists == false
+
+ - name: Define HUE_HOME on CLASSPATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^HUE_HOME=
+     line: "export HUE_HOME={{ hue_home }}"
+
+ - name: Configure hue.ini
+   become: true
+   template:
+     src: 'templates/hue.ini.j2'
+     dest: '{{ hue_home }}/desktop/conf/hue.ini'
+     owner: "{{ hue_user }}"
+     group: "{{ hue_user }}"

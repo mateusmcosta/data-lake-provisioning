@@ -21,4 +21,43 @@
     <name>fs.default.name</name>
     <value>hdfs://{{ hostvars[groups['hdp_master'][0]].host_name }}:19000</value>
   </property>
+
+  <property>
+    <name>hadoop.proxyuser.username.groups</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.username.hosts</name>
+    <value>*</value>
+  </property>
+
+  <property>
+     <name>hadoop.proxyuser.hue.hosts</name>
+     <value>*</value>
+</property>
+<property>
+     <name>hadoop.proxyuser.hue.groups</name>
+     <value>*</value>
+</property>
+
+  <property>
+         <name>hadoop.http.cross-origin.enabled</name>
+         <value>false</value>
+ </property>
+ <property>
+         <name>hadoop.http.cross-origin.allowed-origins</name>
+         <value>*</value>
+ </property>
+ <property>
+         <name>hadoop.http.cross-origin.allowed-methods</name>
+         <value>GET,POST,HEAD</value>
+ </property>
+ <property>
+         <name>hadoop.http.cross-origin.allowed-headers</name>
+         <value>X-Requested-With,Content-Type,Accept,Origin</value>
+ </property>
+ <property>
+         <name>hadoop.http.cross-origin.max-age</name>
+         <value>1800</value>
+ </property>
 </configuration>

@@ -1,2 +1,6 @@
 ---
   hive_home: "/opt/hive-3.1.2"
+  hue_home: "/usr/local/hue"
+  hue_home_link: "/opt/hue"
+
+  hue_user: hue

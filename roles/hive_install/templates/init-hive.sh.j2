@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+
+cd $HIVE_HOME/bin
+
+echo "Init Postgresql Schema..."
+
+schematool -dbType postgres -initSchema --verbose
+
+echo "Finished..."

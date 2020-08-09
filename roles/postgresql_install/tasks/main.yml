@@ -1,17 +1,58 @@
 ---
-  - name: Install PostgreSQL
+  - name: Check if PostgreSQL has already installed
+    become: true
+    stat:
+      path: "/usr/pgsql-11/"
+    register: postgresql_folder
+
+  - name: Ajust Yum Repository
+    become: true
+    copy:
+      src: files/CentOS-Base.repo
+      dest: /etc/yum.repos.d/CentOS-Base.repo
+    when: postgresql_folder.stat.exists == false
+
+  - name: Install PostgreSQL Repository
+    become: true
+    yum:
+      name: 'https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm'
+      state: present
+
+  - name: Install PostgreSQL Server
     become: true
     yum:
       name: "{{ packages }}"
       state: present
     vars:
       packages:
-        - postgresql
-        - postgresql-server
+        - postgresql11-server
+        - postgresql-devel
+        - python-psycopg2
+
+  - name: Create PostgreSQL Init DB
+    become: true
+    command: /usr/pgsql-11/bin/postgresql-11-setup initdb
+    when: postgresql_folder.stat.exists == false
 
   - name: Start PostgreSQL
     become: true
     service:
-      name: postgresql.service
+      name: postgresql-11
       state: started
       enabled: true
+
+  - name: Ajust pg_hba.conf
+    become: true
+    copy:
+      src: files/pg_hba.conf
+      dest: /var/lib/pgsql/11/data/pg_hba.conf
+    notify:
+      - restart postgresql
+  #
+  # - name: Ajust pg_hba.conf
+  #   become: true
+  #   copy:
+  #     src: files/postgresql.conf
+  #     dest: /var/lib/pgsql/11/data/postgresql.conf
+  #   notify:
+  #     - restart postgresql

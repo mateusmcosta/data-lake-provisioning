@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+echo "Starting Hive..."
+
+nohup hive --service hiveserver2 &
+
+echo "Hive STARTED"
