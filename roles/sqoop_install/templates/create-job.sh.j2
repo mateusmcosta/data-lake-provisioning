@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+
+sqoop job --create customerJob -- import --connect jdbc:mysql://10.220.0.21:3306/custumers_db --username application --password app@2020 --table customer --m 1

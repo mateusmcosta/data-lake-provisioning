@@ -1,4 +1,10 @@
 ---
+- name: Copy hosts to /etc/hosts
+  become: true
+  template:
+    src: 'templates/hosts.j2'
+    dest: /etc/hosts
+
 - name: Add Ansible inventory mappings to /etc/hosts
   become: true
   blockinfile:
@@ -7,11 +13,3 @@
       {% for host in groups['all'] %}
       {{ hostvars[host].host_ip }} {{ hostvars[host].host_name }}
       {% endfor %}
-
-# - name: Disable localhost on /etc/hosts
-#   become: true
-#   lineinfile:
-#     path: /etc/hosts
-#     state: present
-#     regexp: '127\.0\.0\.1      {{ host_name }}      {{ host_name }}'
-#     line: "#127.0.0.1      {{ host_name }}      {{ host_name }}"

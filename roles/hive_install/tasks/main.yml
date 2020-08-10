@@ -113,12 +113,14 @@
    postgresql_user:
      name: hiveuser
      password: hiveuser
+   when: hive_folder.stat.exists == false
 
  - name: Create Hive metastore DB
    become: true
    become_user: postgres
    postgresql_db:
      name: metastore
+   when: hive_folder.stat.exists == false
 
  - name: GRANT Hive user PRIVILEGES on metastore DB
    become: true
@@ -128,6 +130,7 @@
      privs: ALL
      type: database
      role: hiveuser
+   when: hive_folder.stat.exists == false
 
  - name: Copy hive-site.xml
    become: true

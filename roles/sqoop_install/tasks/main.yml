@@ -38,3 +38,21 @@
      owner: "{{ hadoop_user }}"
      group: "{{ hadoop_user }}"
      mode: '0644'
+
+ - name: Create create-job.sh
+   become: true
+   template:
+     src: templates/create-job.sh.j2
+     dest: '/home/{{ hadoop_user }}/create-job.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: '0755'
+
+ - name: Create run-job.sh
+   become: true
+   template:
+     src: templates/run-job.sh.j2
+     dest: '/home/{{ hadoop_user }}/run-job.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: '0755'
