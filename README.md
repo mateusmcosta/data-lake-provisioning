@@ -18,7 +18,7 @@ Para o Ambiente local ou em Cloud são necessários 7 VMs, cada uma com 1GB de R
 
 ## Passos para instalação Local
 <br>
-1. Estando no diretório raiz do projeto rodar:<br>'ansible-playbook provisioning.yml -i hosts'
-2. Após finalizada a instalação logar via ssh no Nodo principal com o usuário hadoop e executar: <br> 'start-hdfs.sh' e 'start-spark.sh'
-     HDFS http://{IP_NODO_RAIZ}:9870
-     YARN http://{IP_NODO_RAIZ}:8088/cluster
+1. Estando no diretório raiz do projeto rodar:<br> 'ansible-playbook provisioning.yml -i hosts' <br>
+2. Após finalizada a instalação logar via ssh no Nodo principal com o usuário hadoop e executar: <br> 'start-hdfs.sh' e 'start-spark.sh'<br>
+     **HDFS http://{IP_NODO_RAIZ}:9870M <br>
+     **YARN http://{IP_NODO_RAIZ}:8088/cluster <br>
