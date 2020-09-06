@@ -2,28 +2,23 @@
 
 Provisionamento e criação de um Data Lake utilizando tecnologias Open Source.
 
+## Requisitos Gerais
+O provisionamento pode ser feito tantom em ambiente local como em Cloud. 
+Para o Ambiente local ou em Cloud são necessários 7 VMs, cada uma com 1GB de RAM e um 1vCpu mínimo.
+
 
 ## Requisitos para instalação On Premise
-
-- VirtualBox
-- Ansible
+* VirtualBox
+* Vagrant
+* Ansible
 
 ## Requisitos para instalação em Cloud
+* Vagrant
+* Ansible
 
-- Ansible
-
-## Passos para instalação
-
-    1 - Estando o diretório raiz rodar:
-         
-         ansible-playbook provisioning.yml -i hosts
-    
-    2 - Após finalizado:
-    
-        Logar via ssh no Nodo principal com o usuário hadoop. Estando no /home/hadoop executar start-hdfs.sh
-    
-        HDFS
-        http://{IP_NODO_RAIZ}:9870
-        
-        YARN
-        http://{IP_NODO_RAIZ}:8088/cluster
+## Passos para instalação Local
+<br>
+1. Estando no diretório raiz do projeto rodar:<br>'ansible-playbook provisioning.yml -i hosts'
+2. Após finalizada a instalação logar via ssh no Nodo principal com o usuário hadoop e executar: <br> 'start-hdfs.sh' e 'start-spark.sh'
+     HDFS http://{IP_NODO_RAIZ}:9870
+     YARN http://{IP_NODO_RAIZ}:8088/cluster
