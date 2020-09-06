@@ -24,3 +24,13 @@ Para o Ambiente local ou em Cloud são necessários: <br>
 1. Para acessar o HDFS e o YARN
    1. **HDFS http://{IP_NODO_RAIZ}:9870M
    1. **YARN http://{IP_NODO_RAIZ}:8088/cluster 
+   
+## Passos para instalação em Cloud
+
+1. Editar o arquivo `aws_hosts` ajustando o IP e HOSTNAME conforme o criado na aws.
+1. Ainda no arquivo `aws_hosts` colocar o caminho para sua chave ssh na AWS
+1. Estando no diretório raiz do projeto rodar: <br>`ansible-playbook cloud_provisioning.yml -i aws_hosts`
+1. Após finalizada a instalação logar via ssh no Nodo principal com o usuário hadoop e executar:<br>`start-hdfs.sh` e `start-spark.sh`
+1. Para acessar o HDFS e o YARN
+   1. **HDFS http://{IP_NODO_RAIZ}:9870M
+   1. **YARN http://{IP_NODO_RAIZ}:8088/cluster 
