@@ -1,0 +1,23 @@
+---
+ - name: Check if NIFI has already installed
+   become: true
+   stat:
+     path: "{{ nifi_home }}"
+   register: nifi_folder
+
+ - name: Copy NIFI to /opt/
+   become: true
+   unarchive:
+     src: files/nifi-1.10.0.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: nifi_folder.stat.exists == false
+
+ - name: Config nifi-env.sh
+   become: true
+   template:
+     src: templates/nifi-env.sh.j2
+     dest: '{{ nifi_home }}/bin/nifi-env.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"

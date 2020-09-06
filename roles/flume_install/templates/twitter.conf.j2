@@ -1,0 +1,37 @@
+# Nome dos componentes do agente
+TwitterAgent.sources = Twitter
+TwitterAgent.channels = MemChannel
+TwitterAgent.sinks = kafka
+
+# Configuração do Source
+TwitterAgent.sources.Twitter.type = org.apache.flume.source.twitter.TwitterSource
+TwitterAgent.sources.Twitter.consumerKey = PGDvtqU6MSlioJu6XzCxlYKqK
+TwitterAgent.sources.Twitter.consumerSecret = MQRJ5GJ548IJMmJoIiIWUVsYhtLG3lVOA4YVfZOZJk8wTrNBu9
+TwitterAgent.sources.Twitter.accessToken = 30374433-4FUPJHQL98eqJneJN9TEkOAjrRDHNEDAP6FCyxo2s
+TwitterAgent.sources.Twitter.accessTokenSecret = V99GknHqQykS9L3NBbWUYvB0Ib9UVJX0cpfWY5lYii0um
+TwitterAgent.sources.Twitter.keywords = bigdata, python, java, ai, database, nosql
+
+# Condiguração do Sink
+# TwitterAgent.sinks.HDFS.type = hdfs
+# TwitterAgent.sinks.HDFS.hdfs.path = hdfs://{{ hostvars[groups['hdp_master'][0]].host_name }}:19000/user/hadoop/twitter_data/
+# TwitterAgent.sinks.HDFS.hdfs.fileType = DataStream
+# TwitterAgent.sinks.HDFS.hdfs.writeFormat = Text
+# TwitterAgent.sinks.HDFS.hdfs.batchSize = 100
+# TwitterAgent.sinks.HDFS.hdfs.rollSize = 0
+# TwitterAgent.sinks.HDFS.hdfs.rollCount = 100
+
+TwitterAgent.sinks.kafka.type = org.apache.flume.sink.kafka.KafkaSink
+TwitterAgent.sinks.kafka.topic = twitterMessages
+TwitterAgent.sinks.kafka.brokerList = {{ hostvars[groups['message_server'][0]].host_name }}:9092
+TwitterAgent.sinks.kafka.requiredAcks = 1
+TwitterAgent.sinks.kafka.batchSize = 20
+
+# Configuração do Channel
+TwitterAgent.channels.MemChannel.type = memory
+TwitterAgent.channels.MemChannel.capacity = 10000
+TwitterAgent.channels.MemChannel.transactionCapacity = 100
+
+# Ligando Source e Sink ao Channel
+TwitterAgent.sources.Twitter.channels = MemChannel
+#TwitterAgent.sinks.HDFS.channel = MemChannel
+TwitterAgent.sinks.kafka.channel = MemChannel

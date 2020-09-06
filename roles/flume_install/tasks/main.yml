@@ -1,0 +1,56 @@
+---
+ - name: Check if Flume has already installed
+   become: true
+   stat:
+     path: "{{ flume_home }}"
+   register: flume_folder
+
+ - name: Copy Flume to /opt/
+   become: true
+   unarchive:
+     src: files/flume-1.8.0.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: flume_folder.stat.exists == false
+
+ - name: Define FLUME_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export FLUME_HOME=
+     line: "export FLUME_HOME={{ flume_home }}"
+
+ - name: Define Flume on PATH environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^PATH=$PATH:$FLUME_HOME
+     line: "export PATH=$PATH:$FLUME_HOME/bin"
+
+ - name: Create create-job.sh
+   become: true
+   template:
+     src: templates/flume-env.sh.j2
+     dest: '{{ flume_home }}/conf/flume-env.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Create Twitter Agent Conf
+   become: true
+   template:
+     src: templates/twitter.conf.j2
+     dest: '{{ flume_home }}/conf/twitter.conf'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Copy start-flume.sh
+   become: true
+   template:
+     src: 'templates/start-flume.sh.j2'
+     dest: '/home/{{ hadoop_user }}/start-flume.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"

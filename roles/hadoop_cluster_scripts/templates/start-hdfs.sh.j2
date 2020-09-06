@@ -18,6 +18,9 @@ else
 
     echo "Formating NameNode..."
     hdfs namenode -format
+
+    hdfs dfs -mkdir /user/hadoop/twitter_data
+    hdfs dfs -mkdir /user/hadoop/custumers-data
 fi
 
 #Start HDFS cluster

@@ -1,2 +1,4 @@
 ---
 sqoop_home: "/opt/sqoop-1.4.7"
+flume_home: "/opt/flume-1.8.0"
+nifi_home: "/opt/nifi-1.10.0"

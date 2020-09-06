@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Init ZooKeeper"
+
+
+cd {{ kafka_home }}
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+echo "Finished..."

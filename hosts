@@ -42,3 +42,10 @@ host_name=replication
 [hive_server:vars]
 host_ip=10.220.0.15
 host_name=hive-server
+
+[message_server]
+10.220.0.32 ansible_user=vagrant ansible_ssh_private_key_file="/home/mateus/desenv/workspaces/unisinos/tcc/data-lake-provisioning/.vagrant/machines/message-server/virtualbox/private_key"
+
+[message_server:vars]
+host_ip=10.220.0.32
+host_name=message-server

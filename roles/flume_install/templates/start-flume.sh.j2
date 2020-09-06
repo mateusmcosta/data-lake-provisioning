@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "Init Flume"
+
+if [ $USER != "{{ hadoop_user }}" ]; then
+        echo "Script must be run as user: {{ hadoop_user }}"
+        exit -1
+fi
+
+cd {{ flume_home }}
+
+bin/flume-ng agent --conf ./conf/ -f conf/twitter.conf -Dflume.root.logger=INFO,console -n TwitterAgent
+
+echo "Finished..."

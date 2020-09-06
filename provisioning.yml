@@ -41,6 +41,8 @@
     - ssh_key_install
     - hadoop_config
     - sqoop_install
+    - flume_install
+    - nifi_install
 
 - hosts: hive_server
   roles:
@@ -49,3 +51,13 @@
     - sshd_config
     - ssh_key_install
     - hive_install
+
+- hosts: message_server
+  roles:
+    - network
+    - firewalld_disable
+    - sshd_config
+    - ssh_key_install
+    - hadoop_config
+    - kafka_install
+    - streamsets_install

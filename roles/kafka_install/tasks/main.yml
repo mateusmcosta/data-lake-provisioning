@@ -1,0 +1,49 @@
+---
+ - name: Check if Kafka has already installed
+   become: true
+   stat:
+     path: "{{ kafka_home }}"
+   register: kafka_folder
+
+ - name: Copy Kafka to /opt/
+   become: true
+   unarchive:
+     src: files/kafka.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: kafka_folder.stat.exists == false
+
+ - name: Define KAFKA_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export KAFKA_HOME=
+     line: "export KAFKA_HOME={{ kafka_home }}"
+
+ - name: Copy server.properties
+   become: true
+   copy:
+     src: 'files/server.properties'
+     dest: '{{ kafka_home }}/config/server.properties'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+
+ - name: Copy start-zooKeeper.sh
+   become: true
+   template:
+     src: 'templates/start-zookeeper.sh.j2'
+     dest: '/home/{{ hadoop_user }}/start-zookeeper.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"
+
+ - name: Copy start-kafka.sh
+   become: true
+   template:
+     src: 'templates/start-kafka.sh.j2'
+     dest: '/home/{{ hadoop_user }}/start-kafka.sh'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+     mode: "0755"

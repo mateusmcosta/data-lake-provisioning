@@ -1,0 +1,29 @@
+---
+ - name: Check if Streamsets has already installed
+   become: true
+   stat:
+     path: "{{ streamsets_home }}"
+   register: streamsets_folder
+
+ - name: Copy Streamsets to /opt/
+   become: true
+   unarchive:
+     src: files/streamsets.tar.gz
+     dest: '/opt/'
+     owner: "{{ hadoop_user }}"
+     group: "{{ hadoop_user }}"
+   when: streamsets_folder.stat.exists == false
+
+ - name: Define STREAMSET_HOME environment variable
+   become: true
+   lineinfile:
+     path: '/home/{{ hadoop_user }}/.bash_profile'
+     state: present
+     regexp: ^export STREAMSET_HOME=
+     line: "export STREAMSET_HOME={{ streamsets_home }}"
+
+ - name: Copy limits.conf to /etc/security
+   become: true
+   copy:
+     src: files/limits.conf
+     dest: '/etc/security/limits.conf'
