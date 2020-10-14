@@ -3,7 +3,7 @@
 Provisionamento e criação de um Data Lake utilizando tecnologias Open Source.
 
 ## Requisitos Gerais
-O provisionamento pode ser feito tantom em ambiente local como em Cloud. 
+O provisionamento pode ser feito tanto em ambiente local como em Cloud. 
 Para o Ambiente local ou em Cloud são necessários: <br>
 * 7 VMs, cada uma com 1GB de RAM e um 1vCpu mínimo.
 
